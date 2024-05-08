@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
-import db from '../../Credenciales/firebase';
+import db from '../../../Credenciales/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
-export default function AddProduct({ navigation }) {
+export default function AddProductoElectro({ navigation }) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
 
     const handleSave = async () => {
         if (name && description && price) {
-            await addDoc(collection(db, 'productos', 'deporte', 'items'), {
+            await addDoc(collection(db, 'productos', 'electronicos', 'items'), {
                 nombre: name,
                 descripcion: description,
                 precio: parseFloat(price)
             });
             navigation.goBack();
         } else {
-            alert('Please fill all fields');
+            alert('Por favor rellena todo');
         }
     };
 

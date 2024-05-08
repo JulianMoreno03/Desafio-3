@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet,ScrollView  ,KeyboardAvoidingView,Platform, Text, Alert} from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
-import db from '../../Credenciales/firebase';
+import db from '../../../Credenciales/firebase';
 
-export default function EditProduct({ route, navigation }) {
+export default function EditProductoElectro({ route, navigation }) {
     const { product } = route.params;
     const [name, setName] = useState(product.nombre);
     const [description, setDescription] = useState(product.descripcion);
@@ -11,7 +11,7 @@ export default function EditProduct({ route, navigation }) {
 
     const handleSave = async () => {
 
-        const productRef = doc(db, 'productos', 'deporte', 'items', product.id);
+        const productRef = doc(db, 'productos', 'electronicos', 'items', product.id);
         
         try {
             // Actualizar el documento
@@ -21,8 +21,8 @@ export default function EditProduct({ route, navigation }) {
                 precio: parseFloat(price) //Convertimos el precio
             });
             // Navegar hacia atrás tras la actualización exitosa
-            Alert.alert("Producto Modificaco con exito")
-            navigation.navigate('Deportivo');
+            Alert.alert("Producto Modificado con exito")
+            navigation.navigate('Electronico');
         } catch (error) {
             // Manejar cualquier error que ocurra durante la actualización
             console.error("Error al actualizar el producto: ", error);
