@@ -49,7 +49,7 @@ export default function Deportivo() {
 
     
     const deleteProduct = async (productId) => {
-        const productRef = doc(db, 'productos', 'deporte', 'items', productId);
+        const productRef = doc(db, 'productos', 'hogar', 'items', productId);
         try {
             await deleteDoc(productRef);
             fetchItems(); // Refrescar la lista de productos después de borrar
