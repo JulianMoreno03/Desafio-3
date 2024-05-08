@@ -2,7 +2,7 @@
 import { StyleSheet, Text, View, Button, TouchableOpacity,ScrollView } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 import db from '../../../Credenciales/firebase';
-import { collection, getDocs, query, doc } from 'firebase/firestore';
+import { collection, getDocs, query, doc, deleteDoc } from 'firebase/firestore';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import Header from '../../../Components/Header';
@@ -47,6 +47,19 @@ export default function Deportivo() {
         setFilteredProducts(filtered);
     };
 
+    
+    const deleteProduct = async (productId) => {
+        const productRef = doc(db, 'productos', 'deporte', 'items', productId);
+        try {
+            await deleteDoc(productRef);
+            fetchItems(); // Refrescar la lista de productos después de borrar
+            alert('Producto eliminado correctamente');
+        } catch (error) {
+            console.error('Error eliminando el producto: ', error);
+            alert('Error al eliminar el producto');
+        }
+    };
+
     return (
 
         <View style={styles.container}>
@@ -62,6 +75,9 @@ export default function Deportivo() {
                             <Text style={styles.price}>Precio: ${item.precio}</Text>
                             <TouchableOpacity style={styles.btnDetalle} onPress={() => navigateToDetails(item)}>
                                 <Text style={styles.btnText}>Ver Detalles</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnDelete} onPress={() => deleteProduct(item.id)}>
+                                <Text style={styles.btnText}>Eliminar</Text>
                             </TouchableOpacity>
                         </View>
                     ))
@@ -133,5 +149,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginTop: 20,
         color: '#666',
-    }
+    },
+    btnDelete: {
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 5,
+        alignItems: 'center',
+    },
 });

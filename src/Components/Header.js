@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput,Button,TouchableOpacity,Image } from 'react-native';
 import login from '../img/login.png'
 
-
-
 export default function Header({ onSearch}) {
     const [searchQuery, setSearchQuery] = useState('');
 

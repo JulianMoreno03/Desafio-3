@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
+import { useState,useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Deportivo from './src/Screens/Categorias/Deporte/Deportivo';
@@ -19,17 +19,19 @@ import DetallesProductoElectro from './src/Screens/Categorias/Electronico/Detall
 import AddProductoElectro from './src/Screens/Categorias/Electronico/AddProductoElectro';
 import EditProductoElectro from './src/Screens/Categorias/Electronico/EditProductoElectro';
 
-const Tab = createBottomTabNavigator();
 
+const Tab = createBottomTabNavigator();
 
 const DeportivoStack = createStackNavigator();
 const HogarStack = createStackNavigator();
-
 const ElectronicoStack = createStackNavigator();
+const AuthStack = createStackNavigator();
+
 
 function DeportivoStackScreen() {
   return (
     <DeportivoStack.Navigator>
+  
       <DeportivoStack.Screen
         name="Deportivo" component={Deportivo} options={{ headerShown: false }}
       />
@@ -86,15 +88,15 @@ function ElectronicoStackScreen() {
   );
 }
 
-
 export default function App() {
+
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name='Categoria Deportiva' component={DeportivoStackScreen} />
-        <Tab.Screen name='Categoria Hogar' component={HogarStackScreen} />
-        <Tab.Screen name='Categoria Electronico' component={ElectronicoStackScreen} />
-      </Tab.Navigator>
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name='Categoria Deportiva' component={DeportivoStackScreen} />
+          <Tab.Screen name='Categoria Hogar' component={HogarStackScreen} />
+          <Tab.Screen name='Categoria Electronico' component={ElectronicoStackScreen} />
+        </Tab.Navigator>
     </NavigationContainer>
   );
 }

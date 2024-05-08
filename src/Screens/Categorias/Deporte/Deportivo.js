@@ -1,15 +1,15 @@
 
-import { StyleSheet, Text, View, Button, TouchableOpacity,ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 import db from '../../../Credenciales/firebase';
-import { collection, getDocs, query, doc } from 'firebase/firestore';
+import { collection, getDocs, query, doc, deleteDoc } from 'firebase/firestore';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import Header from '../../../Components/Header';
 
 export default function Deportivo() {
     const [items, setItems] = useState([]);
-    
+
     const [filteredProducts, setFilteredProducts] = useState([]);
 
     const navigation = useNavigation()
@@ -47,14 +47,27 @@ export default function Deportivo() {
         setFilteredProducts(filtered);
     };
 
+    const deleteProduct = async (productId) => {
+        const productRef = doc(db, 'productos', 'deporte', 'items', productId);
+        try {
+            await deleteDoc(productRef);
+            fetchItems(); // Refrescar la lista de productos después de borrar
+            alert('Producto eliminado correctamente');
+        } catch (error) {
+            console.error('Error eliminando el producto: ', error);
+            alert('Error al eliminar el producto');
+        }
+    };
+
+
     return (
 
         <View style={styles.container}>
-        <Header onSearch={handleSearch} />
-        <TouchableOpacity style={styles.btnBoxAdd} onPress={navigateToAddProduct}>
-            <Text style={styles.btnAdd}>Agregar Producto</Text>
-        </TouchableOpacity>
-        <ScrollView>
+            <Header onSearch={handleSearch} />
+            <TouchableOpacity style={styles.btnBoxAdd} onPress={navigateToAddProduct}>
+                <Text style={styles.btnAdd}>Agregar Producto</Text>
+            </TouchableOpacity>
+            <ScrollView>
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((item) => (
                         <View key={item.id} style={styles.card}>
@@ -63,13 +76,16 @@ export default function Deportivo() {
                             <TouchableOpacity style={styles.btnDetalle} onPress={() => navigateToDetails(item)}>
                                 <Text style={styles.btnText}>Ver Detalles</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnDelete} onPress={() => deleteProduct(item.id)}>
+                                <Text style={styles.btnText}>Eliminar</Text>
+                            </TouchableOpacity>
                         </View>
                     ))
                 ) : (
                     <Text style={styles.noResultsText}> No se ha encontrado ningun producto disponibles.</Text>
                 )}
             </ScrollView>
-    </View>
+        </View>
     )
 }
 
@@ -81,6 +97,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: '#ffffff',
+        
         borderRadius: 8,
         padding: 15,
         marginHorizontal: 10,
@@ -115,17 +132,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
-    btnBoxAdd:{
+    btnBoxAdd: {
         backgroundColor: '#007BFF',
         padding: 10,
-        margin:10,
+        margin: 10,
         borderRadius: 5,
         alignItems: 'center',
-        justifyContent:"center",
-        width:'40%',
+        justifyContent: "center",
+        width: '40%',
     },
-    btnAdd:{
-        color:"white",
+    btnAdd: {
+        color: "white",
         fontWeight: 'bold',
     },
     noResultsText: {
@@ -133,5 +150,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginTop: 20,
         color: '#666',
-    }
+    },
+    btnDelete: {
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 5,
+        alignItems: 'center',
+    },
+    
 });
